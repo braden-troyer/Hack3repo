@@ -1,6 +1,7 @@
 import time
 import csv
 from os.path import exists
+import os
 from tkinter import *
 
 # Filename of the csv file
@@ -9,32 +10,36 @@ filename = "statistics.csv"
 # Defines how long the loop of the program will be in seconds
 loop_time = 5
 
+def csv_write(filename, args):
+    with open(filename, mode="a", newline='') as csvfile:
+            csvwriter = csv.writer(
+                csvfile, delimiter=",", quotechar='"', quoting=csv.QUOTE_NONE
+            )
+
+            csvwriter.writerow(
+                args
+            )
+
 # Defines the Headers
 def init_csv(csv_writer):
-    csv_writer.writerow(["Instance", "Index", "Keys_Pressed"])
+    csv_writer.writerow(["Instance", "Index", "Keys_Pressed\n"])
 # Read the CSV file and import the last line
 def import_csv(file_name):
     data = []
-    with open(file_name, mode="r", newline='') as csv_file:
-        count = 1
-        for line in csv.reader(csv_file):
-            if len(line) == 0:
-                if count == 1:
-                    csv_writer = csv.writer(
-                      csv_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
-                    )
-                    init_csv(csv_writer)
-                return [[0, 0]]
-            if count > 1:
-                csv_reader = csv.reader(csv_file, delimiter=",")
-                global line_count
-                for row in csv_reader:
-                    if row:
-                        columns = [row[0], row[1]]
-                        data.append(columns)
-                return data
-            count += 1
-        return [[0,0]]
+
+    
+    if exists(file_name) and os.stat(file_name).st_size != 0:
+        with open(file_name, mode="r", newline='') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=",")
+            for row in csv_reader:
+                if row:
+                    columns = [row[0], row[1]]
+                    data.append(columns)
+            return data
+    else:
+        csv_write(file_name, ["Instance", "Index", "Keys_Pressed"])
+    return [[0, 0]]
+        
 
 
 if exists(filename):
@@ -46,6 +51,8 @@ else:
         init_csv(csv.writer(csv_file))
     instance = 1
     index = 1
+
+
 
 
 # Defining the root window and its properties
@@ -83,7 +90,6 @@ root.bind("<Key>", key_pressed)
 previous_time = time.time()
 start_time = previous_time
 
-
 # Main Loop
 while True:
     # Insert any necessary looped code here
@@ -91,14 +97,10 @@ while True:
     if time.time() - previous_time >= loop_time:
         previous_time += loop_time
         temp_keys_pressed, keys_pressed = keys_pressed, 0
-        with open(filename, mode="a", newline='') as csvfile:
-            csvwriter = csv.writer(
-                csvfile, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
-            )
-
-            csvwriter.writerow(
-                [f"{instance}", f"{index}", f"{temp_keys_pressed}"]
-            )
+        
+        if index == 0:
+            csv_write(filename, ["Instance", "Index", "Keys_Pressed"])
+        csv_write(filename, [f"{instance}", f"{index}", f"{temp_keys_pressed}"])
         index += 1
 
     # Takes place of root.mainloop() so that code can be added
