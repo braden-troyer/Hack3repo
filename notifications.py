@@ -58,7 +58,7 @@ if not productData:
             #the body of the notification
 
         
-            message = "Average Keys Pressed : [average_keys]\nTotal Keys Pressed : [total]"
+            message = "Average Keys Pressed : [average_keys]\nTotal Keys Pressed : [total]",
             #.format(
                         #totalcases = data['cases'],
                         #todaycases = data['todayCases'],

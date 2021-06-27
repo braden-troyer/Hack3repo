@@ -7,7 +7,7 @@ from tkinter import *
 filename = "statistics.csv"
 
 # Defines how long the loop of the program will be in seconds
-loop_time = 5
+loop_time = 60
 
 # Defines the Headers
 def init_csv(csv_writer):
