@@ -58,7 +58,7 @@ if not productData:
             #the body of the notification
 
         
-            message = "Average Keys Pressed : {average_keys}\nTotal Keys Pressed : {total}"
+            message = "Average Keys Pressed : [average_keys]\nTotal Keys Pressed : [total]"
             #.format(
                         #totalcases = data['cases'],
                         #todaycases = data['todayCases'],
@@ -70,7 +70,7 @@ if not productData:
             #we need to download a icon of ico file format
             app_icon = r'C:/Users/user/Downloads/hack3.ico',
             # the notification stays for 30sec
-            timeout  = 30
+            timeout = 30
         )
         #notification repeats after every 1hrs
         time.sleep(60*60*1)
