@@ -17,11 +17,26 @@ filename = "statistics.csv"
 if exists(filename):        
     with open(filename, 'r') as csvfile:
         csvreader = csv.reader(csvfile)
+        counter = 0
         for row in csvreader:
-            instance.append(row[0])
-            index.append(row[1])
-            keys_pressed.append(row[2])
-        
+            if counter == 0:
+                counter += 1
+            else:
+                instance.append(int(row[0]))
+                index.append(int(row[1]))
+                keys_pressed.append(int(row[2]))
+
+def average(args):
+    counter = 0
+    total = 0
+    for i in range(len(args)):
+        total += int(args[i])
+        counter += 1
+    return total // counter
+
+
+average_keys = average(keys_pressed)
+print(average_keys)
 
 producData = None
 try:
@@ -31,7 +46,7 @@ except:
     #if the data is not fetched due to lack of internet or other problem
     print("Please relaunch the application")
 #if data is fetched
-if (productData != None):
+if not productData:
     #converting data into JSON format
     data = productData.json()['Success']
     
