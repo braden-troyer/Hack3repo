@@ -4,7 +4,24 @@ import datetime #for reading present date
 import time 
 import requests #for retreiving coronavirus data from web
 from plyer import notification #for getting notification on your PC
+import csv
+from os.path import exists
 #let there is no data initially
+
+instance = []
+index = []
+keys_pressed = []
+
+filename = "statistics.csv"
+
+if exists(filename):        
+    with open(filename, 'r') as csvfile:
+        csvreader = csv.reader(csvfile)
+        for row in csvreader:
+            instance.append(row[0])
+            index.append(row[1])
+            keys_pressed.append(row[2])
+        
 
 producData = None
 try:
@@ -24,11 +41,16 @@ if (productData != None):
             #title of the notification,
             title = "Productivity Stats {}".format(datetime.date.today()),
             #the body of the notification
+
+        
             message = "Total cases : {totalcases}\nToday cases : {todaycases}\nToday deaths :{todaydeaths}\nTotal active :{active}".format(
                         totalcases = data['cases'],
                         todaycases = data['todayCases'],
                         todaydeaths = data['todayDeaths'],
                         active = data["active"]),  
+
+
+            
             #we need to download a icon of ico file format
             app_icon = r'C:/Users/user/Downloads/hack3.ico',
             # the notification stays for 30sec
