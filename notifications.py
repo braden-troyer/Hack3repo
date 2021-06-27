@@ -36,15 +36,15 @@ def average(args):
 
 
 average_keys = average(keys_pressed)
-print(average_keys)
 
-producData = None
-try:
+
+productData = None
+#try:
     #insert our file here to retrieve data
-    productData = requests.get("https://corona-rest-api.herokuapp.com/Api/singapore")
-except:
+    #productData = requests.get("https://corona-rest-api.herokuapp.com/Api/singapore")
+#except:
     #if the data is not fetched due to lack of internet or other problem
-    print("Please relaunch the application")
+    #print("Please relaunch the application")
 #if data is fetched
 if not productData:
     #converting data into JSON format
@@ -58,11 +58,12 @@ if not productData:
             #the body of the notification
 
         
-            message = "Total cases : {totalcases}\nToday cases : {todaycases}\nToday deaths :{todaydeaths}\nTotal active :{active}".format(
-                        totalcases = data['cases'],
-                        todaycases = data['todayCases'],
-                        todaydeaths = data['todayDeaths'],
-                        active = data["active"]),  
+            message = "Average Keys Pressed : {average_keys}\nTotal Keys Pressed : {total}"
+            #.format(
+                        #totalcases = data['cases'],
+                        #todaycases = data['todayCases'],
+                        #todaydeaths = data['todayDeaths'],
+                        #active = data["active"]),  
 
 
             
