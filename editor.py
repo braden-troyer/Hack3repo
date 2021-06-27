@@ -1,28 +1,54 @@
 import time
 import csv
+from os.path import exists
 from tkinter import *
 
+# Filename of the csv file
 filename = "statistics.csv"
-
-# Read the CSV file and import the last line for
-def import_csv(file_name):
-    data = []
-    with open(file_name, mode="r") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        global line_count
-        for row in csv_reader:
-            if row:
-                columns = [row[0], row[1]]
-                data.append(columns)
-    return data
-
-data = import_csv(filename)[-1]
-
-instance = int(data[0]) + 1
-index = int(data[1]) + 1
 
 # Defines how long the loop of the program will be in seconds
 loop_time = 5
+
+# Defines the Headers
+def init_csv(filename):
+        with open(filename, mode='w') as csv_file:
+            csv_writer = csv.writer(
+                csv_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
+            )
+            csv_writer.writerow(["Instance", "Index", "Keys_Pressed"])
+
+# Read the CSV file and import the last line
+def import_csv(file_name):
+    print("I'm being launched")
+    data = []
+    with open(file_name, mode="r+", newline='') as csv_file:
+        count = 1
+        print("Successful Open")
+        for line in csv.reader(csv_file):
+            if len(line) == 0:
+                if count == 1:
+                    init_csv()
+                return [[0, 0]]
+            if count >= 2:
+                print("I'm Also Working")
+                csv_reader = csv.reader(csv_file, delimiter=",")
+                global line_count
+                for row in csv_reader:
+                    if row:
+                        columns = [row[0], row[1]]
+                        data.append(columns)
+                return data
+            count += 1
+
+
+if exists(filename):
+    data = import_csv(filename)[-1]
+    instance = int(data[0]) + 1
+    index = int(data[1]) + 1
+else:
+    init_csv()
+    instance = 1
+    index = 1
 
 
 # Defining the root window and its properties
