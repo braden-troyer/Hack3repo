@@ -10,27 +10,22 @@ filename = "statistics.csv"
 loop_time = 5
 
 # Defines the Headers
-def init_csv(filename):
-        with open(filename, mode='w') as csv_file:
-            csv_writer = csv.writer(
-                csv_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
-            )
-            csv_writer.writerow(["Instance", "Index", "Keys_Pressed"])
-
+def init_csv(csv_writer):
+    csv_writer.writerow(["Instance", "Index", "Keys_Pressed"])
 # Read the CSV file and import the last line
 def import_csv(file_name):
-    print("I'm being launched")
     data = []
-    with open(file_name, mode="r+", newline='') as csv_file:
+    with open(file_name, mode="r", newline='') as csv_file:
         count = 1
-        print("Successful Open")
         for line in csv.reader(csv_file):
             if len(line) == 0:
                 if count == 1:
-                    init_csv()
+                    csv_writer = csv.writer(
+                      csv_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
+                    )
+                    init_csv(csv_writer)
                 return [[0, 0]]
-            if count >= 2:
-                print("I'm Also Working")
+            if count > 1:
                 csv_reader = csv.reader(csv_file, delimiter=",")
                 global line_count
                 for row in csv_reader:
@@ -39,6 +34,7 @@ def import_csv(file_name):
                         data.append(columns)
                 return data
             count += 1
+        return [[0,0]]
 
 
 if exists(filename):
@@ -46,7 +42,8 @@ if exists(filename):
     instance = int(data[0]) + 1
     index = int(data[1]) + 1
 else:
-    init_csv()
+    with open(filename, mode='w', newline='') as csv_file:
+        init_csv(csv.writer(csv_file))
     instance = 1
     index = 1
 
